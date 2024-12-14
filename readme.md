@@ -1,0 +1,1 @@
+A graphical application that performs the function of an installer of any software
