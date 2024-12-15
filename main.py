@@ -3,7 +3,13 @@ import ctypes
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from time import sleep
-from services import get_name_project, get_path_program, install_project, is_admin
+from services import (
+    get_name_project,
+    get_path_program,
+    install_project,
+    is_admin,
+    resource_path,
+)
 
 
 class Installer(QMainWindow):
@@ -12,7 +18,7 @@ class Installer(QMainWindow):
 
         self.setObjectName("MainWindow")
         self.resize(750, 500)
-        self.setWindowIcon(QtGui.QIcon("image/icon.ico"))
+        self.setWindowIcon(QtGui.QIcon(resource_path("image\\icon.ico")))
 
         self.welcome_screen()
 
@@ -37,7 +43,9 @@ class Installer(QMainWindow):
         self.descriptionLabel.setObjectName("descriptionLabel")
         self.backgroundPictureLabel = QtWidgets.QLabel(parent=self.centralwidget)
         self.backgroundPictureLabel.setGeometry(QtCore.QRect(0, 0, 340, 500))
-        self.backgroundPictureLabel.setPixmap(QtGui.QPixmap("image/background.png"))
+        self.backgroundPictureLabel.setPixmap(
+            QtGui.QPixmap(resource_path("image\\background.png"))
+        )
         self.backgroundPictureLabel.setObjectName("backgroundPictureLabel")
         self.backButton = QtWidgets.QPushButton(parent=self.centralwidget)
         self.backButton.setGeometry(QtCore.QRect(490, 440, 120, 50))
@@ -199,7 +207,9 @@ class Installer(QMainWindow):
             self.themeLabel.setObjectName("themeLabel")
             self.backgroundPictureLabel = QtWidgets.QLabel(parent=self.centralwidget)
             self.backgroundPictureLabel.setGeometry(QtCore.QRect(0, 0, 340, 500))
-            self.backgroundPictureLabel.setPixmap(QtGui.QPixmap("image/background.png"))
+            self.backgroundPictureLabel.setPixmap(
+                QtGui.QPixmap(resource_path("image\\background.png"))
+            )
             self.backgroundPictureLabel.setObjectName("backgroundPictureLabel")
             self.finishButton = QtWidgets.QPushButton(parent=self.centralwidget)
             self.finishButton.setGeometry(QtCore.QRect(580, 430, 150, 50))

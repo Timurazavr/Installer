@@ -2,8 +2,17 @@ import os
 import shutil
 import zipfile
 import ctypes
-import winshell
+import sys
 from win32com.client import Dispatch
+
+
+def resource_path(relative):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative)
 
 
 def is_admin():
@@ -14,7 +23,7 @@ def is_admin():
 
 
 def get_name_project():
-    for i in os.listdir():
+    for i in os.listdir(resource_path("")):
         if i.endswith(".zip"):
             return i.rstrip(".zip")
     return None
@@ -34,7 +43,7 @@ def install_project(path, checked):
     if name in os.listdir(path):
         shutil.rmtree(path + name)
     os.mkdir(path + name)
-    with zipfile.ZipFile(name + ".zip", "r") as zip_ref:
+    with zipfile.ZipFile(resource_path(name + ".zip"), "r") as zip_ref:
         zip_ref.extractall(path + name)
     if checked:
         shell = Dispatch("WScript.Shell")
