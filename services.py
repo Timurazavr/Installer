@@ -1,24 +1,44 @@
 import os
-from os import path
 import shutil
+import zipfile
+import ctypes
+import winshell
+from win32com.client import Dispatch
+
+
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
 
 
 def get_name_project():
-    return "AAA"
+    for i in os.listdir():
+        if i.endswith(".zip"):
+            return i.rstrip(".zip")
+    return None
 
 
 def get_path_program():
-    result_path = os.getcwd().split("\\")[0]
-    if "Program Files" in os.listdir(result_path + "\\"):
-        result_path += "\\Program Files\\" + get_name_project()
+    path = os.getcwd().split("\\")[0]
+    if "Program Files" in os.listdir(path + "\\"):
+        path += "\\Program Files\\"
     else:
-        result_path += "\\" + get_name_project()
-    try:
-        os.mkdir(result_path)
-    except OSError:
-        shutil.rmtree(result_path)
-        os.mkdir(result_path)
-        print(1)
+        path += "\\"
+    return path
 
 
-print(get_path_program())
+def install_project(path, checked):
+    name = get_name_project()
+    if name in os.listdir(path):
+        shutil.rmtree(path + name)
+    os.mkdir(path + name)
+    with zipfile.ZipFile(name + ".zip", "r") as zip_ref:
+        zip_ref.extractall(path + name)
+    if checked:
+        shell = Dispatch("WScript.Shell")
+        shortcut = shell.CreateShortCut(os.getcwd() + "\\" + name + ".lnk")
+        shortcut.Targetpath = path + name + "\\" + name + ".exe"
+        shortcut.WorkingDirectory = path
+        shortcut.save()
